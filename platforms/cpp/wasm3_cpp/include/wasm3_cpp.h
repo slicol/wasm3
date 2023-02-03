@@ -9,6 +9,7 @@
 #include <string>
 #include <iterator>
 #include <cassert>
+#include <array>
 
 #include "wasm3.h"
 
@@ -348,8 +349,10 @@ namespace wasm3 {
          */
         template<typename Ret = void, typename ... Args>
         Ret call(Args... args) {
-            const void *arg_ptrs[] = { reinterpret_cast<const void*>(&args)... };
-            M3Result res = m3_Call(m_func, sizeof...(args), arg_ptrs);
+            //const void *arg_ptrs[] = { reinterpret_cast<const void*>(&args)... };
+            const std::array<const void*, sizeof...(args)> arg_ptrs{ { reinterpret_cast<const void*>(&args)... } };
+            
+            M3Result res = m3_Call(m_func, sizeof...(args), (const void**)arg_ptrs.data());
             detail::check_error(res);
 
             if constexpr (!std::is_void<Ret>::value) {

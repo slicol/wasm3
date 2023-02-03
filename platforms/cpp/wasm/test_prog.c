@@ -13,6 +13,7 @@ int WASM_EXPORT test(int32_t arg1, int32_t arg2)
     int x = arg1 + arg2;
     int y = arg1 - arg2;
     return sum(x, y) / 2;
+    return 0;
 }
 
 int64_t WASM_EXPORT test_memcpy(void)
